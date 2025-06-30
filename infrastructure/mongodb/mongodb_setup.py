@@ -28,14 +28,13 @@ class AtlasClient():
         print("items:", items)
         return items
 
+atlas_uri = (
+    f"mongodb+srv://{os.environ['MONGODB_USER']}:{os.environ['MONGODB_PASSWORD']}"
+    "@manamania.avlnl1m.mongodb.net/"
+    "?retryWrites=true&w=majority&appName=ManaMania"
+)
+
 mongoDB_client = AtlasClient(
-    altas_uri=(
-        "mongodb+srv://"
-        f"{os.environ['MONGODB_USER']}:{os.environ['MONGODB_PASSWORD']}"
-        "@manamania.avlnl1m.mongodb.net/?"
-        "retryWrites=true&"
-        "w=majority&"
-        "appName=ManaMania"
-    ),
+    altas_uri=atlas_uri,
     dbname="ManaManiaDB"
 )

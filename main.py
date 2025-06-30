@@ -1,19 +1,10 @@
-import os
-
-import uvicorn
-
 import settings
 import api
 
 def main():
     try:
         settings.assemble()
-
-        uvicorn.run(
-            app="api:app",
-            host=os.environ["host"],
-            port=2232
-        )
+        api.uvicorn_server.run()
 
     except Exception as error:
         print(error)

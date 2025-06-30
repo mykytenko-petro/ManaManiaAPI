@@ -1,2 +1,2 @@
 from .manifest import assemble
-from .base import *
+from .security import app_secret

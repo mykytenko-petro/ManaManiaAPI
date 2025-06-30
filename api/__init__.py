@@ -1,1 +1,1 @@
-from .fastapi_setup import app
+from .server import uvicorn_server
