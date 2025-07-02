@@ -2,21 +2,33 @@ import os
 
 from pymongo.mongo_client import MongoClient
 
-from .utils import parse
+from .utils import parse, dump
+from .types import ColectionNames
 
 class AtlasClient():
-    def __init__ (self, altas_uri, dbname):
+    def __init__(
+            self,
+            altas_uri : str,
+            dbname : str = "ManaManiaDB"
+        ):
+
         self.mongodb_client = MongoClient(altas_uri)
         self.database = self.mongodb_client[dbname]
 
-    def ping(self):
-        self.mongodb_client.admin.command('ping')
+    def get_collection(
+            self,
+            collection_name : ColectionNames
+        ):
 
-    def get_collection(self, collection_name):
         collection = self.database[collection_name]
         return collection
     
-    def find(self, collection_name, filter={}, limit=0):
+    def find(
+            self,
+            collection_name : ColectionNames,
+            filter : dict = {},
+            limit : int = 0
+        ):
         collection = self.database[collection_name]
 
         items = parse(
@@ -25,16 +37,26 @@ class AtlasClient():
             )
         )
 
-        print("items:", items)
         return items
+    
+    def insert_document(
+            self,
+            collection_name : ColectionNames,
+            data : dict
+        ):
 
-atlas_uri = (
-    f"mongodb+srv://{os.environ['MONGODB_USER']}:{os.environ['MONGODB_PASSWORD']}"
-    "@manamania.avlnl1m.mongodb.net/"
-    "?retryWrites=true&w=majority&appName=ManaMania"
-)
+        self.database[collection_name].insert_one(document=dump(data))
+
+    def update_document(
+            self,
+            collection_name : ColectionNames,
+            data : dict
+        ): ...
 
 mongoDB_client = AtlasClient(
-    altas_uri=atlas_uri,
-    dbname="ManaManiaDB"
+    altas_uri=(
+        f"mongodb+srv://{os.environ['MONGODB_USER']}:{os.environ['MONGODB_PASSWORD']}"
+        "@manamania.avlnl1m.mongodb.net/"
+        "?retryWrites=true&w=majority&appName=ManaMania"
+    )
 )

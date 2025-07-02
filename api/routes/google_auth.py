@@ -21,7 +21,7 @@ google_auth_router.add_api_route(
 )
 
 google_auth_router.add_api_route(
-    path="/get_google_id_token",
+    path="/get_google_session",
     endpoint=get_id_token,
     methods=["GET"]
 )

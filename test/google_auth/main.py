@@ -9,16 +9,26 @@ def main():
     oauth_url = requests.get(url=f"http://127.0.0.1:2232/google_login?device_id={device_id}").json()["url"]
     webbrowser.open(url=oauth_url, new=1)
 
-    while True:
-        response = requests.get(url=f"http://127.0.0.1:2232/get_google_id_token?device_id={device_id}").json()
+    token_response = {}
 
-        if "id_token" in response:
-            print(response["id_token"])
-            break
-        else:
-            print("please wait")
+    while not ("id_token" in token_response):
+        token_response = requests.get(url=f"http://127.0.0.1:2232/get_google_session?device_id={device_id}").json()
+
+        print("please wait")
 
         time.sleep(2)
+
+    token_response = token_response["id_token"]
+
+    result = requests.post(
+        url="http://127.0.0.1:2232/user_auth",
+        json={
+            "email": token_response["email"],
+            "sub": token_response["sub"]
+        },
+    ).json()
+
+    print(result)
 
 if __name__ == "__main__":
     main()

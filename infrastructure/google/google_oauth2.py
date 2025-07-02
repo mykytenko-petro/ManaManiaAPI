@@ -3,10 +3,13 @@ import os
 import fastapi
 import requests
 import jwt
+from google.oauth2 import id_token
 
 from settings import app_secret
+from .settings import google_request
+from .types import TokenPayload
 
-token_storage = {}
+token_storage: dict[str, TokenPayload] = {}
 
 async def google_oauth2_page_redirect(device_id : str):
     state = jwt.encode(
@@ -50,7 +53,14 @@ async def google_oauth2_parse(request : fastapi.Request):
     if "id_token" not in token_response:
         return {"error": f"Invalid token: {token_response}"}
     
-    token_storage[state_data["device_id"]] = token_response["id_token"]
+    token_data = id_token.verify_oauth2_token(
+        id_token=token_response["id_token"],
+        request=google_request,
+        audience=os.environ["CLIENT_ID"],
+        clock_skew_in_seconds=5
+    )
+    
+    token_storage[state_data["device_id"]] = token_data
 
     return {"message": "success!"}
 

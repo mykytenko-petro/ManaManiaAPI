@@ -1,3 +1,5 @@
+import logging
+
 import settings
 import api
 
@@ -7,7 +9,7 @@ def main():
         api.uvicorn_server.run()
 
     except Exception as error:
-        print(error)
+        logging.error(error)
 
 if __name__ == "__main__":
     main()
