@@ -62,7 +62,13 @@ async def google_oauth2_parse(request : fastapi.Request):
     
     token_storage[state_data["device_id"]] = token_data
 
-    return {"message": "success!"}
+    print(
+        state_data["device_id"],
+        "\n",
+        token_storage[state_data["device_id"]]
+    )
+
+    return {"message": "success! please return to the game"}
 
 async def get_id_token(device_id : str):
     id_token = token_storage.get(device_id)
@@ -72,4 +78,4 @@ async def get_id_token(device_id : str):
     if id_token:
         return {"id_token": id_token}
     else:
-        return {"message": "please wait"}
+        return {"message": "wait"}
