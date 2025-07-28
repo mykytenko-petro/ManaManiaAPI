@@ -1,15 +1,14 @@
-import logging
-
-import settings
-import api
-
 def main():
     try:
-        settings.assemble()
+        from manifest import assemble
+        assemble()
+
+        import api
+
         api.uvicorn_server.run()
 
     except Exception as error:
-        logging.error(error)
+        print(error)
 
 if __name__ == "__main__":
     main()
