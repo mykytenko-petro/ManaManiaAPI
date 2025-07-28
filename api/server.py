@@ -7,7 +7,7 @@ from .fastapi_setup import app
 uvicorn_server = uvicorn.Server(
     config=uvicorn.Config(
         app=app,
-        host=os.environ["host"],
+        host="0.0.0.0",
         port=int(os.environ["port"])
     )
 )
