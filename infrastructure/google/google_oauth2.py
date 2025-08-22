@@ -9,6 +9,7 @@ from settings import app_secret
 from .settings import google_request
 from .types import TokenPayload
 
+
 token_storage: dict[str, TokenPayload] = {}
 
 async def google_oauth2_page_redirect(device_id : str):
@@ -30,7 +31,7 @@ async def google_oauth2_page_redirect(device_id : str):
 
 async def google_oauth2_parse(request : fastapi.Request):
     state_data = jwt.decode(
-        jwt=request.query_params.get("state"),
+        jwt=request.query_params.get("state"), # type: ignore
         key=app_secret,
         algorithms=["HS256"]
     )
@@ -61,12 +62,6 @@ async def google_oauth2_parse(request : fastapi.Request):
     )
     
     token_storage[state_data["device_id"]] = token_data
-
-    print(
-        state_data["device_id"],
-        "\n",
-        token_storage[state_data["device_id"]]
-    )
 
     return {"message": "success! please return to the game"}
 

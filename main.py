@@ -7,6 +7,9 @@ def main():
 
         api.uvicorn_server.run()
 
+    except KeyboardInterrupt:
+        pass
+
     except Exception as error:
         print(error)
 

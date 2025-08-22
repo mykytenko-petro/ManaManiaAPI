@@ -2,6 +2,7 @@ import os
 
 import dotenv
 
+
 def assemble():
     DOTENV_PATH = os.path.abspath(os.path.join(__file__, "..", ".env"))
 
