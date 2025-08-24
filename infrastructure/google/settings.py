@@ -1,3 +1,3 @@
-import google.auth.transport.requests as gatr
+from google.auth.transport.requests import Request
 
-google_request = gatr.Request()
+google_request = Request()

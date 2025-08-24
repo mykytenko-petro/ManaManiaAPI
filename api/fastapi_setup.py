@@ -8,6 +8,6 @@ from .routes import (
 
 app = fastapi.FastAPI()
 
-app.include_router(test_router)
-app.include_router(google_auth_router)
-app.include_router(user_router)
+app.include_router(router=test_router)
+app.include_router(router=google_auth_router)
+app.include_router(router=user_router)

@@ -1,4 +1,4 @@
-def main():
+def main() -> None:
     try:
         from manifest import assemble
         assemble()

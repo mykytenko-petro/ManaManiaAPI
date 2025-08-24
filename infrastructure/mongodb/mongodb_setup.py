@@ -12,7 +12,7 @@ class AtlasClient():
             dbname : str = "ManaManiaDB"
         ):
 
-        self.mongodb_client = MongoClient(altas_uri)
+        self.mongodb_client = MongoClient(host=altas_uri)
         self.database = self.mongodb_client[dbname]
 
     def get_collection(
@@ -32,7 +32,7 @@ class AtlasClient():
         collection = self.database[collection_name]
 
         items = parse(
-            list(
+            data=list(
                 collection.find(filter=filter, limit=limit)
             )
         )
@@ -43,7 +43,7 @@ class AtlasClient():
             self,
             collection_name : ColectionNames,
             data : dict
-        ):
+        ) -> None:
 
         self.database[collection_name].insert_one(document=dump(data))
 

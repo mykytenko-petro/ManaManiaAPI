@@ -12,7 +12,7 @@ from .types import TokenPayload
 
 token_storage: dict[str, TokenPayload] = {}
 
-async def google_oauth2_page_redirect(device_id : str):
+async def google_oauth2_page_redirect(device_id : str) -> dict[str, str]:
     state = jwt.encode(
         payload={"device_id": device_id},
         key=app_secret,
@@ -29,14 +29,14 @@ async def google_oauth2_page_redirect(device_id : str):
     )
     return {"url": login_url}
 
-async def google_oauth2_parse(request : fastapi.Request):
+async def google_oauth2_parse(request : fastapi.Request) -> dict[str, str]:
     state_data = jwt.decode(
         jwt=request.query_params.get("state"), # type: ignore
         key=app_secret,
         algorithms=["HS256"]
     )
 
-    code = request.query_params.get("code")
+    code: str | None = request.query_params.get("code")
     if not code:
         return {"error": "Invalid authorization code"}
 
@@ -49,7 +49,7 @@ async def google_oauth2_parse(request : fastapi.Request):
         "grant_type": "authorization_code",
     }
 
-    token_response = requests.post(token_url, data=token_data).json()
+    token_response = requests.post(url=token_url, data=token_data).json()
 
     if "id_token" not in token_response:
         return {"error": f"Invalid token: {token_response}"}
@@ -65,8 +65,8 @@ async def google_oauth2_parse(request : fastapi.Request):
 
     return {"message": "success! please return to the game"}
 
-async def get_id_token(device_id : str):
-    id_token = token_storage.get(device_id)
+async def get_id_token(device_id : str) -> dict[str, TokenPayload] | dict[str, str]:
+    id_token: TokenPayload | None = token_storage.get(device_id)
 
     if id_token: token_storage.pop(device_id)
 

@@ -2,6 +2,6 @@ import fastapi
 
 test_router = fastapi.APIRouter()
 
-@test_router.get("/test")
-async def test():
+@test_router.get(path="/test")
+async def test() -> dict[str, str]:
     return {"message": "test is succesful!"}

@@ -1,5 +1,6 @@
 from infrastructure import mongoDB_client
-from .models import User
+from .models import User, Inventory, GameData
+
 
 def user_auth(data : User, recursion_count = 0): 
     user = mongoDB_client.find(
@@ -26,6 +27,20 @@ def create_user(user : User):
     mongoDB_client.insert_document(
         collection_name="Users",
         data=user.model_dump()
+    )
+
+    mongoDB_client.insert_document(
+        collection_name="Inventory",
+        data=Inventory(
+            email=user.email,
+        ).model_dump()
+    )
+
+    mongoDB_client.insert_document(
+        collection_name="GameData",
+        data=GameData(
+            email=user.email
+        ).model_dump()
     )
 
     return user_auth(data=user, recursion_count=1)
