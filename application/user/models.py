@@ -15,4 +15,9 @@ class Inventory(BaseSchema):
     inventory: list = Field(default_factory=list)
 
 class GameData(BaseSchema):
+    last_location: str = "DesertHub"
     coin: int = 0
+
+class DataPayload(BaseModel):
+    inventory: Inventory
+    game_data: GameData

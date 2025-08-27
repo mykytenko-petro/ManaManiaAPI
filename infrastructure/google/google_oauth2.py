@@ -13,13 +13,13 @@ from .types import TokenPayload
 token_storage: dict[str, TokenPayload] = {}
 
 async def google_oauth2_page_redirect(device_id : str) -> dict[str, str]:
-    state = jwt.encode(
+    state: str = jwt.encode(
         payload={"device_id": device_id},
         key=app_secret,
         algorithm="HS256"
     )
 
-    login_url = (
+    login_url: str = (
         "https://accounts.google.com/o/oauth2/auth"
         f"?client_id={os.environ['CLIENT_ID']}"
         f"&redirect_uri={os.environ['REDIRECT_URI']}"

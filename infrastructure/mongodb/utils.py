@@ -1,5 +1,6 @@
 from bson.objectid import ObjectId
 
+
 def parse(data : list[dict]) -> list[dict]:
     for data_dict in data:
         for key, value in data_dict.items():

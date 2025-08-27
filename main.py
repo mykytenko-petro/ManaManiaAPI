@@ -1,3 +1,7 @@
+import traceback
+import sys
+
+
 def main() -> None:
     try:
         from manifest import assemble
@@ -10,8 +14,8 @@ def main() -> None:
     except KeyboardInterrupt:
         pass
 
-    except Exception as error:
-        print(error)
+    except:
+       traceback.print_exception(sys.exception()) 
 
 if __name__ == "__main__":
     main()

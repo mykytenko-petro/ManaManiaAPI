@@ -1,9 +1,12 @@
+import jwt
+
 from infrastructure import mongoDB_client
+from settings import app_secret
 from .models import User, Inventory, GameData
 
 
-def user_auth(data : User, recursion_count = 0): 
-    user = mongoDB_client.find(
+async def user_auth(data : User, recursion_count = 0): 
+    user = await mongoDB_client.find(
         collection_name="Users",
         filter={"email": data.email}
     )
@@ -11,10 +14,10 @@ def user_auth(data : User, recursion_count = 0):
     print("document user:", user)
 
     if user != []:
-        return user
+        return user[0]
     else:
         if not recursion_count:
-            return create_user(
+            return await create_user(
                 user=User(
                     email=data.email,
                     sub=data.sub
@@ -23,24 +26,24 @@ def user_auth(data : User, recursion_count = 0):
         else:
             return {"error": "cant find user"}
 
-def create_user(user : User):
-    mongoDB_client.insert_document(
+async def create_user(user : User):
+    await mongoDB_client.insert_document(
         collection_name="Users",
         data=user.model_dump()
     )
 
-    mongoDB_client.insert_document(
+    await mongoDB_client.insert_document(
         collection_name="Inventory",
         data=Inventory(
             email=user.email,
         ).model_dump()
     )
 
-    mongoDB_client.insert_document(
+    await mongoDB_client.insert_document(
         collection_name="GameData",
         data=GameData(
             email=user.email
         ).model_dump()
     )
 
-    return user_auth(data=user, recursion_count=1)
+    return await user_auth(data=user, recursion_count=1)
